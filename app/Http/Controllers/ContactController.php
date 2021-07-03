@@ -14,7 +14,8 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+        $contacts = Contact::all();
+        return view('contacts.index', compact('contacts'));
     }
 
     /**
@@ -24,7 +25,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        //
+        return view('contacts.create');
     }
 
     /**
@@ -35,7 +36,22 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request -> validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|string',
+            'phone' => 'required|string'
+        ]);
+
+        $contact = new Contact();
+
+        $contact->first_name = $request->first_name;
+        $contact->last_name = $request->last_name;
+        $contact->email = $request->email;
+        $contact->phone = $request->phone;
+
+        $contact->save();
+        return redirect ('contacts');
     }
 
     /**
@@ -44,9 +60,10 @@ class ContactController extends Controller
      * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function show(Contact $contact)
+    public function show(int $id)
     {
-        //
+        $contact = Contact::find($id);
+        return view('contacts.show', compact('contact'));
     }
 
     /**
@@ -55,9 +72,10 @@ class ContactController extends Controller
      * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function edit(Contact $contact)
+    public function edit(int $id)
     {
-        //
+        $contact = Contact::find($id);
+        return view('contacts.edit', compact('contact'));
     }
 
     /**
@@ -67,9 +85,24 @@ class ContactController extends Controller
      * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Contact $contact)
+    public function update(Request $request, int $id)
     {
-        //
+        $contact = Contact::find($id);
+
+        $request -> validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|string',
+            'phone' => 'required|string'
+        ]);
+
+        $contact->first_name = $request->first_name;
+        $contact->last_name = $request->last_name;
+        $contact->email = $request->email;
+        $contact->phone = $request->phone;
+
+        $contact->update();
+        return redirect ('contacts');
     }
 
     /**
@@ -78,8 +111,9 @@ class ContactController extends Controller
      * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Contact $contact)
+    public function destroy(int $id)
     {
-        //
+        Contact::destroy($id);
+        return redirect ('contacts');
     }
 }
