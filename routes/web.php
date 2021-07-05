@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ContactController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,12 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('contacts');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts');
     Route::get('/contacts/edit/{id}', [ContactController::class, 'edit']);
